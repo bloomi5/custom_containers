@@ -1,42 +1,6 @@
 ## Topics
 
-- [Topics](#topics)
-  - [Install Prerequisites](#install-prerequisites)
-  - [Setup Docker Swarm](#setup-docker-swarm)
-  - [Setup Traefik](#setup-traefik)
-  - [Setup Portainer](#setup-portainer)
-  - [Setup MariaDB](#setup-mariadb)
-  - [Setup swarm-cron](#setup-swarm-cron)
-  - [Setup bench](#setup-bench)
-  - [Configure the bench](#configure-the-bench)
-  - [Create-site](#create-site)
-- [After adding one site add second site](#after-adding-one-site-add-second-site)
-  - [Then re-deploy](#then-re-deploy)
-  - [Create-site](#create-site-1)
-  - [Backup and Restore](#backup-and-restore)
-    - [Backup](#backup)
-    - [Restore](#restore)
-    - [Upload the backup to GitHub (Free solution)](#upload-the-backup-to-github-free-solution)
-
 ### Install Prerequisites
-
-These steps are required for production server. For dind/local setup copy `dind-devcontainer` to `.devcontainer` and reopen in devcontainer.
-
-Use files from `compose` directory.
-
-Setup assumes you are using Debian based Linux distribution.
-
-Update packages
-
-```shell
-apt-get update && apt-get dist-upgrade -y
-```
-
-Setup unattended upgrades
-
-```shell
-dpkg-reconfigure --priority=medium unattended-upgrades
-```
 
 Add non-root sudo user
 
@@ -51,7 +15,7 @@ su - ubuntu
 Clone this repo
 
 ```shell
-git clone https://github.com/faizanops3/custom_containers.git
+git clone https://github.com/bloomi5/custom_containers.git
 cd custom_containers
 ```
 
@@ -126,11 +90,19 @@ docker stack deploy -c compose/portainer.yml portainer
 
 ### Setup MariaDB
 
+- Doploy this with portainer.
+- Dont add any env.
+- Add Stack -> mariadb -> copy paste the compose/mariadb.yml -> Deploy.
+
 ```sh
 docker stack deploy -c compose/mariadb.yml mariadb
 ```
 
 ### Setup swarm-cron
+
+- Doploy this with portainer.
+- Dont add any env.
+- Add Stack -> swarm-cron -> copy paste the compose/swarm-cron.yml -> Deploy.
 
 ```sh
 docker stack deploy -c compose/swarm-cron.yml swarm-cron
@@ -138,17 +110,21 @@ docker stack deploy -c compose/swarm-cron.yml swarm-cron
 
 ### Setup bench
 
-```sh
-docker stack deploy -c compose/erpnext-multi-my.yml sales
-```
+- Doploy this with portainer.
+- Dont add any env.
+- Add Stack -> sales -> copy paste the compose/erpnext-multi-bloomi5.yml -> Deploy.
 
 > Here instead of `SITES` use `SITE1`, `SITE2`, ... , for multiple sites.
 
-```
+```sh
 VERSION=v18
 BENCH_NAME=sales
 SITE1=`erpnext.bloomi5.com`
 SITE2=`nomnomtails.bloomi5.com`
+```
+
+```sh
+docker stack deploy -c compose/erpnext-multi-bloomi5.yml sales
 ```
 
 ### Configure the bench
