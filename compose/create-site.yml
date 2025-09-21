@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   configurator:
-    image: faizan44/erpnext:${VERSION:?No image version set}
+    image: bloomi5/erpnext:${VERSION:?No image version set}
     volumes:
       - sites:/home/frappe/frappe-bench/sites
     command:
@@ -15,7 +15,7 @@ services:
       - --install-app=crm
       - --db-root-password=admin
       - --admin-password=admin
-      - erpnext.bloomi5.com
+      - < your site name > # e.g. erpnext.bloomi5.com
 
     deploy:
       restart_policy:
