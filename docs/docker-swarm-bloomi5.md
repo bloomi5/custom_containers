@@ -27,7 +27,6 @@ Initialize swarm
 
 ```shell
 docker swarm init
-docker swarm init --advertise-addr=X.X.X.X
 ```
 
 Note: Make sure the advertise-address does not change if you wish to add multiple nodes to this manager.
@@ -168,11 +167,9 @@ docker stack deploy -c compose/create-site.yml create-site
 
 ### Backup and Restore
 
-#### Automated way Backup and Restore
-
 > Do not set cronjob it messes with swarm-cron.
 
--
+#### Automated Backup and Restore
 
 ##### Backup
 
@@ -192,7 +189,7 @@ Uploaded site_config.json to erpnext.bloomi5.com
 Successfully copied 1.91MB to ab23023d8b33:/home/frappe/frappe-bench/sites/erpnext.bloomi5.com/private/backups/20250920_180001-erpnext_bloomi5_com-database.sql.gz
 Uploaded 20250920_180001-erpnext_bloomi5_com-database.sql.gz to erpnext.bloomi5.com
 Running bench restore inside container...
-MySQL root password:
+MySQL root password: <same password - maria db root>
 App frappe already installed
 erpnext.bloomi5.com: SystemSettings.enable_scheduler is UNSET
 *** Scheduler is disabled ***
@@ -201,7 +198,9 @@ Restore completed for erpnext.bloomi5.com using 20250920_180001-erpnext_bloomi5_
 
 ```
 
-#### Backup
+#### Manuall
+
+##### Backup
 
 > It is already happening at every 6 hours cron
 
@@ -217,11 +216,9 @@ Restore completed for erpnext.bloomi5.com using 20250920_180001-erpnext_bloomi5_
 
 > `sales_bloomi5_com` is the site name
 
-#### Restore
+##### Restore
 
 1. Rename `20250701_180010-sales_bloomi5_com-site_config_backup.json` to `site_config.json`
 2. and upload to this location `/home/frappe/frappe-bench/sites/<site-name>`.
 3. upload the `20250701_120009-sales_bloomi5_com-database.sql.gz` to `/home/frappe/frappe-bench/sites/<site-name>/private/backups` as it is.
 4. then run this command. `bench --site <site-name> restore /home/frappe/frappe-bench/sites/<site-name>/private/backups/<the-selected-file-name>.sql.gz`
-
-#### Upload the backup to GitHub (Free solution)
