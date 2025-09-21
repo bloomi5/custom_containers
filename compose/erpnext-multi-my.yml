@@ -34,22 +34,40 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.middlewares.prod-redirect.redirectscheme.scheme=https
-        # Change router name prefix from erpnext to the name of stack in case of multi bench setup
-        - traefik.http.routers.${BENCH_NAME:-erpnext}-http.rule=Host(${SITES:?No sites set})
-        - traefik.http.routers.${BENCH_NAME:-erpnext}-http.entrypoints=http
-        # Remove following lines in case of local setup
-        - traefik.http.routers.${BENCH_NAME:-erpnext}-http.middlewares=prod-redirect
-        - traefik.http.routers.${BENCH_NAME:-erpnext}-https.rule=Host(${SITES})
-        - traefik.http.routers.${BENCH_NAME:-erpnext}-https.entrypoints=https
-        - traefik.http.routers.${BENCH_NAME:-erpnext}-https.tls=true
-        - traefik.http.routers.${BENCH_NAME:-erpnext}-https.tls.certresolver=le
-        # Remove above lines in case of local setup
-        # Uncomment and change domain for non-www to www redirect
-        # - traefik.http.routers.${BENCH_NAME:-erpnext}-https.middlewares=nonwwwtowww
-        # - traefik.http.middlewares.nonwwwtowww.redirectregex.regex=^https?://(?:www\.)?(.*)
-        # - traefik.http.middlewares.nonwwwtowww.redirectregex.replacement=https://www.$$1
-        - traefik.http.services.${BENCH_NAME:-erpnext}.loadbalancer.server.port=8080
+
+        # HTTP routers
+        - "traefik.http.routers.${BENCH_NAME}-http1.rule=Host(${SITE1})"
+        - "traefik.http.routers.${BENCH_NAME}-http1.entrypoints=http"
+        - "traefik.http.routers.${BENCH_NAME}-http2.rule=Host(${SITE2})"
+        - "traefik.http.routers.${BENCH_NAME}-http2.entrypoints=http"
+        - "traefik.http.routers.${BENCH_NAME}-http3.rule=Host(${SITE3})"
+        - "traefik.http.routers.${BENCH_NAME}-http3.entrypoints=http"
+        - "traefik.http.routers.${BENCH_NAME}-http4.rule=Host(${SITE4})"
+        - "traefik.http.routers.${BENCH_NAME}-http4.entrypoints=http"
+  
+        # HTTPS routers with TLS
+        - "traefik.http.routers.${BENCH_NAME}-https1.rule=Host(${SITE1})"
+        - "traefik.http.routers.${BENCH_NAME}-https1.entrypoints=https"
+        - "traefik.http.routers.${BENCH_NAME}-https1.tls=true"
+        - "traefik.http.routers.${BENCH_NAME}-https1.tls.certresolver=le"
+  
+        - "traefik.http.routers.${BENCH_NAME}-https2.rule=Host(${SITE2})"
+        - "traefik.http.routers.${BENCH_NAME}-https2.entrypoints=https"
+        - "traefik.http.routers.${BENCH_NAME}-https2.tls=true"
+        - "traefik.http.routers.${BENCH_NAME}-https2.tls.certresolver=le"
+
+        - "traefik.http.routers.${BENCH_NAME}-https3.rule=Host(${SITE3})"
+        - "traefik.http.routers.${BENCH_NAME}-https3.entrypoints=https"
+        - "traefik.http.routers.${BENCH_NAME}-https3.tls=true"
+        - "traefik.http.routers.${BENCH_NAME}-https3.tls.certresolver=le"
+
+        - "traefik.http.routers.${BENCH_NAME}-https4.rule=Host(${SITE4})"
+        - "traefik.http.routers.${BENCH_NAME}-https4.entrypoints=https"
+        - "traefik.http.routers.${BENCH_NAME}-https4.tls=true"
+        - "traefik.http.routers.${BENCH_NAME}-https4.tls.certresolver=le"
+
+        # Service port
+        - "traefik.http.services.${BENCH_NAME}.loadbalancer.server.port=8080"
     environment:
       BACKEND: backend:8000
       FRAPPE_SITE_NAME_HEADER: $$host
@@ -394,3 +412,4 @@ networks:
 # SITES                   | Mandatory List of sites as back      | nil
 #                         | quoted strings, e.g. `a.com`,`b.org` |
 # VERSION                 | Mandatory image tag to use           | nil
+

@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   configurator:
-    image: frappe/erpnext:${VERSION:?No image version set}
+    image: faizan44/erpnext:${VERSION:?No image version set}
     volumes:
       - sites:/home/frappe/frappe-bench/sites
     command:
@@ -10,9 +10,13 @@ services:
       - new-site
       - --no-mariadb-socket
       - --install-app=erpnext
+      - --install-app=india_compliance
+      - --install-app=lms
+      - --install-app=crm
       - --db-root-password=admin
       - --admin-password=admin
-      - erp.example.com
+      - erpnext.bloomi5.com
+
     deploy:
       restart_policy:
         condition: none
