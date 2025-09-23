@@ -2,6 +2,12 @@
 
 ### Install Prerequisites
 
+```sh
+apt-get update && apt-get dist-upgrade -y
+sudo apt-get install -y ca-certificates curl gnupg iptables-persistent
+
+```
+
 Add non-root sudo user
 
 ```shell
@@ -9,6 +15,51 @@ sudo adduser ubuntu
 sudo usermod -aG sudo ubuntu
 curl -fsSL https://get.docker.com | bash
 sudo usermod -aG docker ubuntu
+
+
+
+
+
+
+sudo tee /etc/docker/daemon.json >/dev/null <<'EOF'
+{
+  "live-restore": false
+}
+EOF
+sudo systemctl restart docker
+
+
+# sanity check: should show nothing for 2375/2376
+sudo ss -ltnup | egrep ':2375|:2376' || true
+
+
+
+
+
+
+
+# ensure DOCKER-USER is in path
+sudo iptables -N DOCKER-USER 2>/dev/null || true
+sudo iptables -C FORWARD -j DOCKER-USER 2>/dev/null || sudo iptables -I FORWARD -j DOCKER-USER
+
+# allow replies, then block new egress to Redis (tcp/6379)
+sudo iptables -I DOCKER-USER -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -I DOCKER-USER -p tcp --dport 6379 -j DROP
+
+# persist across reboots
+sudo netfilter-persistent save
+
+
+
+
+
+
+
+
+
+
+
+
 su - ubuntu
 ```
 
@@ -112,6 +163,7 @@ docker stack deploy -c compose/swarm-cron.yml swarm-cron
 - Doploy this with portainer.
 - Add env.
 - Add Stack -> sales -> copy paste the compose/erpnext-multi-bloomi5.yml -> Deploy.
+- In erpnext-multi-bloomi5.yml in the frontend service, Under labels, HTTP and HTTPS routers keep only as no of sites you have.
 
 > Here instead of `SITES` use `SITE1`, `SITE2`, ... , for multiple sites.
 
@@ -145,10 +197,12 @@ BENCH_NAME=sales
 docker stack deploy -c compose/configure-erpnext.yml configure
 ```
 
+> Remove stack after it completes.
+
 ### Create-site
 
 - Doploy this with portainer.
-- Add env., and command **< your site name >**.
+- Add env., and add your site name in command replace it **example.yourdomain.com**.
 - if you have multiple site you have to run it multiple time per site.
 - Add Stack -> create-site -> copy paste the compose/create-site.yml -> Deploy.
 

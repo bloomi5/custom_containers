@@ -15,7 +15,7 @@ services:
       - --install-app=crm
       - --db-root-password=admin
       - --admin-password=admin
-      - < your site name > # e.g. erpnext.bloomi5.com
+      - example.yourdomain.com
 
     deploy:
       restart_policy:

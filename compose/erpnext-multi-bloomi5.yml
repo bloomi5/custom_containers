@@ -38,10 +38,13 @@ services:
         # HTTP routers
         - "traefik.http.routers.${BENCH_NAME}-http1.rule=Host(${SITE1})"
         - "traefik.http.routers.${BENCH_NAME}-http1.entrypoints=http"
+
         - "traefik.http.routers.${BENCH_NAME}-http2.rule=Host(${SITE2})"
         - "traefik.http.routers.${BENCH_NAME}-http2.entrypoints=http"
+
         - "traefik.http.routers.${BENCH_NAME}-http3.rule=Host(${SITE3})"
         - "traefik.http.routers.${BENCH_NAME}-http3.entrypoints=http"
+        
         - "traefik.http.routers.${BENCH_NAME}-http4.rule=Host(${SITE4})"
         - "traefik.http.routers.${BENCH_NAME}-http4.entrypoints=http"
   
